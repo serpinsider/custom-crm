@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧹 Cleaning Business CRM
 
-## Getting Started
+A modern, API-first CRM system built specifically for cleaning businesses. Features real-time scheduling, customer management, payment processing, and team coordination.
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend:** Next.js 14, TypeScript, Tailwind CSS
+- **Backend:** Next.js API Routes, Prisma ORM
+- **Database:** PostgreSQL
+- **Authentication:** Clerk
+- **Payments:** Stripe
+- **Hosting:** TBD (Vercel/Railway recommended)
+
+## 🌟 Features
+
+- [x] Customer Management
+- [x] API-First Architecture
+- [ ] Team Management
+- [ ] Real-time Scheduling
+- [ ] Payment Processing
+- [ ] Service Tracking
+- [ ] Automated Notifications
+- [ ] Analytics Dashboard
+- [ ] Mobile App Support
+
+## 📚 API Documentation
+
+### Base URL
+```
+https://your-domain.com/api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Authentication
+All API endpoints (except public routes) require authentication using Clerk. Include the authentication token in the request header:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```http
+Authorization: Bearer <your_token>
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Available Endpoints
 
-## Learn More
+#### Customers
 
-To learn more about Next.js, take a look at the following resources:
+```http
+GET /api/customers
+```
+Get all customers with pagination
+- Query params: 
+  - page (default: 1)
+  - limit (default: 10)
+  - search (optional)
+- Returns: { customers: Customer[], total: number, pages: number }
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```http
+POST /api/customers
+```
+Create a new customer
+- Body: CustomerCreateInput
+- Returns: Customer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```http
+GET /api/customers/:id
+```
+Get customer by ID with related data
+- Returns: Customer with appointments, subscriptions, and invoices
 
-## Deploy on Vercel
+```http
+PATCH /api/customers/:id
+```
+Update customer details
+- Body: CustomerUpdateInput
+- Returns: Customer
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```http
+DELETE /api/customers/:id
+```
+Delete customer (if no active subscriptions/appointments)
+- Returns: 204 No Content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Data Models
+
+#### Customer
+```typescript
+interface Customer {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  stripeCustomerId?: string;
+  preferredDays: string[];
+  preferredTime?: string;
+  specialNotes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+## 🗺️ Roadmap
+
+### Phase 1 - Foundation (Current)
+- [x] Project setup with Next.js
+- [x] Database schema design
+- [x] Initial API structure
+- [ ] Authentication system
+- [ ] Basic customer management UI
+
+### Phase 2 - Core Features
+- [ ] Scheduling system
+- [ ] Team management
+- [ ] Service tracking
+- [ ] Basic reporting
+
+### Phase 3 - Payments & Automation
+- [ ] Stripe integration
+- [ ] Automated notifications
+- [ ] Invoice generation
+- [ ] Subscription management
+
+### Phase 4 - Advanced Features
+- [ ] Mobile app
+- [ ] Advanced analytics
+- [ ] Custom reporting
+- [ ] Integration marketplace
+
+## 🛠️ Development
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- Yarn/npm
+
+### Setup
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd cleaning-crm
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Set up environment variables
+```bash
+cp .env.example .env
+```
+Edit `.env` with your credentials
+
+4. Run database migrations
+```bash
+npx prisma migrate dev
+```
+
+5. Start development server
+```bash
+npm run dev
+```
+
+### Environment Variables
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/cleaning_crm
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+CLERK_SECRET_KEY=your_clerk_secret
+STRIPE_SECRET_KEY=your_stripe_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+```
+
+## 📝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Support
+
+For support, email support@your-domain.com or join our [Discord community](your-discord-link).
