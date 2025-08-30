@@ -1,20 +1,38 @@
-# 🧹 Cleaning Business CRM
+# Cleaning Business CRM
 
 A modern, API-first CRM system built specifically for cleaning businesses. Features real-time scheduling, customer management, payment processing, and team coordination.
 
-## 🚀 Tech Stack
+## Tech Stack
 
-- **Frontend:** Next.js 14, TypeScript, Tailwind CSS
-- **Backend:** Next.js API Routes, Prisma ORM
-- **Database:** PostgreSQL
-- **Authentication:** Clerk
-- **Payments:** Stripe
-- **Hosting:** TBD (Vercel/Railway recommended)
+**Frontend**
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React Query
+- Radix UI
 
-## 🌟 Features
+**Backend**
+- Next.js API Routes
+- Prisma ORM
+- PostgreSQL
+- Clerk Authentication
+- Stripe Payments
 
+**Infrastructure**
+- Vercel/Railway (recommended)
+- PostgreSQL
+- Redis (coming soon)
+
+## Core Features
+
+### Implemented
 - [x] Customer Management
 - [x] API-First Architecture
+- [x] OpenAPI/Swagger Documentation
+- [x] Database Schema
+- [x] Authentication Framework
+
+### In Development
 - [ ] Team Management
 - [ ] Real-time Scheduling
 - [ ] Payment Processing
@@ -23,122 +41,33 @@ A modern, API-first CRM system built specifically for cleaning businesses. Featu
 - [ ] Analytics Dashboard
 - [ ] Mobile App Support
 
-## 📚 API Documentation
+## API Documentation
 
-### Base URL
-```
-https://your-domain.com/api
-```
+Our API is fully documented using OpenAPI/Swagger specifications. Access the interactive documentation:
 
-### Authentication
-All API endpoints (except public routes) require authentication using Clerk. Include the authentication token in the request header:
+- Local Development: `http://localhost:3000/docs`
+- Production: `https://your-domain.com/docs`
 
-```http
-Authorization: Bearer <your_token>
-```
+Key API features:
+- RESTful endpoints
+- JWT authentication
+- Rate limiting
+- Comprehensive error handling
+- Real-time webhooks
 
-### Available Endpoints
-
-#### Customers
-
-```http
-GET /api/customers
-```
-Get all customers with pagination
-- Query params: 
-  - page (default: 1)
-  - limit (default: 10)
-  - search (optional)
-- Returns: { customers: Customer[], total: number, pages: number }
-
-```http
-POST /api/customers
-```
-Create a new customer
-- Body: CustomerCreateInput
-- Returns: Customer
-
-```http
-GET /api/customers/:id
-```
-Get customer by ID with related data
-- Returns: Customer with appointments, subscriptions, and invoices
-
-```http
-PATCH /api/customers/:id
-```
-Update customer details
-- Body: CustomerUpdateInput
-- Returns: Customer
-
-```http
-DELETE /api/customers/:id
-```
-Delete customer (if no active subscriptions/appointments)
-- Returns: 204 No Content
-
-### Data Models
-
-#### Customer
-```typescript
-interface Customer {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  stripeCustomerId?: string;
-  preferredDays: string[];
-  preferredTime?: string;
-  specialNotes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-```
-
-## 🗺️ Roadmap
-
-### Phase 1 - Foundation (Current)
-- [x] Project setup with Next.js
-- [x] Database schema design
-- [x] Initial API structure
-- [ ] Authentication system
-- [ ] Basic customer management UI
-
-### Phase 2 - Core Features
-- [ ] Scheduling system
-- [ ] Team management
-- [ ] Service tracking
-- [ ] Basic reporting
-
-### Phase 3 - Payments & Automation
-- [ ] Stripe integration
-- [ ] Automated notifications
-- [ ] Invoice generation
-- [ ] Subscription management
-
-### Phase 4 - Advanced Features
-- [ ] Mobile app
-- [ ] Advanced analytics
-- [ ] Custom reporting
-- [ ] Integration marketplace
-
-## 🛠️ Development
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - PostgreSQL 14+
-- Yarn/npm
+- npm/yarn
 
-### Setup
+### Local Development Setup
+
 1. Clone the repository
 ```bash
-git clone <repository-url>
-cd cleaning-crm
+git clone https://github.com/serpinsider/custom-crm.git
+cd custom-crm
 ```
 
 2. Install dependencies
@@ -146,23 +75,12 @@ cd cleaning-crm
 npm install
 ```
 
-3. Set up environment variables
+3. Configure environment variables
 ```bash
 cp .env.example .env
 ```
-Edit `.env` with your credentials
 
-4. Run database migrations
-```bash
-npx prisma migrate dev
-```
-
-5. Start development server
-```bash
-npm run dev
-```
-
-### Environment Variables
+4. Update `.env` with your credentials:
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/cleaning_crm
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
@@ -171,14 +89,114 @@ STRIPE_SECRET_KEY=your_stripe_key
 STRIPE_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-## 📝 Contributing
+5. Run database migrations
+```bash
+npx prisma migrate dev
+```
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+6. Start development server
+```bash
+npm run dev
+```
 
-## 📄 License
+## Project Structure
+
+```
+cleaning-crm/
+├── src/
+│   ├── app/              # Next.js 14 app directory
+│   │   ├── api/         # API routes
+│   │   └── (routes)/    # Frontend routes
+│   ├── components/      # React components
+│   ├── lib/            # Utility functions
+│   └── types/          # TypeScript types
+├── prisma/
+│   └── schema.prisma   # Database schema
+└── public/             # Static assets
+```
+
+## Development Workflow
+
+### Database Changes
+1. Modify `prisma/schema.prisma`
+2. Run `npx prisma generate`
+3. Run `npx prisma migrate dev`
+
+### API Development
+1. Create new route in `src/app/api`
+2. Add OpenAPI documentation
+3. Implement endpoint logic
+4. Update tests
+
+### Frontend Development
+1. Create components in `src/components`
+2. Add routes in `src/app`
+3. Implement page logic
+4. Add styling with Tailwind
+
+## Testing
+
+```bash
+# Run unit tests
+npm run test
+
+# Run integration tests
+npm run test:integration
+
+# Run e2e tests
+npm run test:e2e
+```
+
+## Deployment
+
+### Production Deployment
+1. Push to main branch
+2. Vercel automatically deploys
+3. Migrations run automatically
+
+### Manual Deployment
+```bash
+npm run build
+npm run start
+```
+
+## Architecture
+
+### Database Schema
+- Customers
+- Appointments
+- Services
+- Teams
+- Invoices
+- Subscriptions
+
+### API Structure
+- RESTful endpoints
+- GraphQL support (coming soon)
+- Webhooks for real-time updates
+- Background jobs
+
+### Security
+- JWT authentication
+- Role-based access control
+- API rate limiting
+- Input validation
+- SQL injection protection
+
+## Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open pull request
+
+## Support
+
+- Documentation: `/docs`
+- Issues: GitHub Issues
+- Email: support@your-domain.com
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Support
-
-For support, email support@your-domain.com or join our [Discord community](your-discord-link).
